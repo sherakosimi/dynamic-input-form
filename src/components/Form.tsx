@@ -6,18 +6,20 @@ import FormItem from "./FormItem";
 
 type FormProps = {
   data: Input[];
-  setValues: any;
+  setValues: React.Dispatch<React.SetStateAction<{
+    [key: string]: string;
+  }> | null>;
 };
 
-const InputForm = (props: FormProps) => {
+const InputForm = ({ data, setValues }: FormProps) => {
   const initialValues = () => {
-    return Object.fromEntries(props.data.map((field) => [field.id, ""]));
+    return Object.fromEntries(data.map((field) => [field.id, ""]));
   };
 
   const validationSchema = () => {
     return object(
       Object.fromEntries(
-        props.data.map((field) => [field.id, string().required("Обязятельно")])
+        data.map((field) => [field.id, string().required("Обязятельно")])
       )
     );
   };
@@ -30,13 +32,13 @@ const InputForm = (props: FormProps) => {
       validationSchema={validationSchema()}
       onSubmit={(values, actions) => {
         actions.setSubmitting(false);
-        props.setValues(values);
+        setValues(values);
       }}
     >
       {({ values, errors, handleChange, handleSubmit, isSubmitting }) => (
         <Form className="form" onSubmit={handleSubmit} autoComplete="off">
           <FormItem
-            data={props.data}
+            data={data}
             errors={errors}
             onChange={handleChange}
             values={values}

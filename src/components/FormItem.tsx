@@ -1,17 +1,22 @@
-import React from "react";
+import { FormikErrors } from "formik";
+import React, { useState } from "react";
 import { Input } from "./Box";
 
 type FormItemProps = {
   data: Input[];
-  errors: any;
-  onChange: any;
-  values: any;
+  errors: FormikErrors<{ [k: string]: string }>;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  values: { [key: string]: string };
 };
 
-const FormItem = (props: FormItemProps) => {
+const FormItem = ({ data, errors, onChange, values }: FormItemProps) => {
+  const handleClear = (id: string) => {
+    values[id] = "";
+  };
+
   return (
     <>
-      {props.data?.map(({ id, type, label, defaultValue }: Input) => {
+      {data?.map(({ id, type, label, defaultValue }: Input) => {
         return (
           <div className="form__container" key={id}>
             <input
@@ -20,8 +25,8 @@ const FormItem = (props: FormItemProps) => {
               id={id}
               name={id}
               type={type?.slice(5).toLowerCase()}
-              onChange={props.onChange}
-              value={props.values[id]}
+              onChange={onChange}
+              value={values[id]}
               autoComplete="new-password"
             />
             <label htmlFor={id} className="form__input--label">
@@ -29,12 +34,9 @@ const FormItem = (props: FormItemProps) => {
             </label>
             <span className="form__input--highlight"></span>
             <label htmlFor={id} className="form__input--label-error">
-              {props.errors[id]}
+              {errors[id]}
             </label>
-            <button
-              className="form__clear"
-              onClick={() => (props.values[id] = "")}
-            >
+            <button className="form__clear" onClick={() => handleClear(id)}>
               <i className="bx bx-x" />
             </button>
           </div>

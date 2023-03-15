@@ -10,7 +10,7 @@ export interface Input {
   defaultValue?: string;
 }
 
-var obj: Input[] = [
+var inputConfig: Input[] = [
   {
     id: "last_name",
     type: "inputText",
@@ -36,7 +36,7 @@ var obj: Input[] = [
 ];
 
 const Box = () => {
-  const [values, setValues] = useState<any>();
+  const [values, setValues] = useState<{ [key: string]: any } | null>(null);
   return (
     <div className="box">
       <img alt="Photo1" className="box__icon" src={introPhoto} />
@@ -62,7 +62,7 @@ const Box = () => {
               сайте
             </h1>
           </div>
-          <InputForm data={obj} setValues={setValues} />
+          <InputForm data={inputConfig} setValues={setValues} />
         </div>
       )}
     </div>
